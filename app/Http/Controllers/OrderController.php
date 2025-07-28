@@ -33,6 +33,7 @@ class OrderController extends Controller
                 'customer_name' => 'required|string',
                 'order_items' => 'required|array|min:1',
                 'channel_payment' => 'nullable|string',
+                'status' => 'nullable|string',
             ]);
 
             // Generate order_id
@@ -43,7 +44,7 @@ class OrderController extends Controller
                 'table_number' => $validated['table_number'],
                 'customer_name' => $validated['customer_name'],
                 'channel_payment' => $validated['channel_payment'] ?? 'cash',
-                'status' => 'pending',
+                'status' => $validated['status'] ?? 'request',
                 'payment_status' => 'unpaid',
                 'total_price' => 0,
             ]);
@@ -90,6 +91,21 @@ class OrderController extends Controller
 
         } catch (Exception $e) {
             return ResponseHelper::error('Failed to delete order', 500, ['exception' => $e->getMessage()]);
+        }
+    }
+
+    public function markStatus(Request $request)
+    {
+        try {
+
+            $order = Order::findOrFail($request->query('id'));
+
+            $order->update(['status' => $request->status, 'payment_status' => 'paid']);
+
+            return ResponseHelper::success($order->id, 'Status updated successfully');
+
+        } catch (Exception $e) {
+            return ResponseHelper::error('Failed to update status', 500, ['exception' => $e->getMessage()]);
         }
     }
 

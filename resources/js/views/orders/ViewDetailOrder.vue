@@ -15,6 +15,7 @@ const props = defineProps({
 
 const emit = defineEmits([
   'update:isDialogOpen',
+  'updateStatus',
 ])
 
 const isConfirmDialogVisible = ref(false)
@@ -38,47 +39,17 @@ const headers = [
   },
 ]
 
-const orderData = [
-  {
-    productName: 'OnePlus 7 Pro',
-    productImage: '',
-    subtitle: 'Storage: 128gb',
-    price: 799,
-    quantity: 1,
-    total: 799,
-  },
-  {
-    productName: 'Face Cream',
-    productImage: '',
-    subtitle: 'Gender: Women',
-    price: 89,
-    quantity: 1,
-    total: 89,
-  },
-  {
-    productName: 'Wooden Chair',
-    productImage: '',
-    subtitle: 'Material: Woodem',
-    price: 289,
-    quantity: 2,
-    total: 578,
-  },
-  {
-    productName: 'Nike Jorden',
-    productImage: '',
-    subtitle: 'Size: 8UK',
-    price: 299,
-    quantity: 2,
-    total: 598,
-  },
-]
-
 
 const handlerDialogModelValueUpdate = val => {
   emit('update:isDialogOpen', val)
 }
 
 const closeDialog = () => {
+  emit('update:isDialogOpen', false)
+}
+
+const updateStatus = status => {
+  emit('updateStatus', status)
   emit('update:isDialogOpen', false)
 }
 </script>
@@ -111,7 +82,10 @@ const closeDialog = () => {
 
           <VChip
             v-if="props.detailOrderData.status === 'served'"
-            v-bind="'Served/Completed'"
+            v-bind="{
+              text: 'Served',
+              color: 'success',
+            }"
             label
           />
 
@@ -119,16 +93,25 @@ const closeDialog = () => {
             v-else-if="props.detailOrderData.status === 'request'"
             variant="tonal"
             color="warning"
-            @click="isConfirmDialogVisible = !isConfirmDialogVisible"
+            @click="updateStatus('process')"
           >
             Mark Process
+          </VBtn>
+
+          <VBtn
+            v-else-if="props.detailOrderData.status === 'process'"
+            variant="tonal"
+            color="warning"
+            @click="updateStatus('ready')"
+          >
+            Mark Ready
           </VBtn>
 
           <VBtn
             v-else-if="props.detailOrderData.status === 'ready'"
             variant="tonal"
             color="info"
-            @click="isConfirmDialogVisible = !isConfirmDialogVisible"
+            @click="updateStatus('served')"
           >
             Mark Served
           </VBtn>

@@ -21,13 +21,13 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'add']);
 
-    Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('logout', [AuthController::class, 'logout']);
     });
 });
 
 Route::group(['prefix' => 'product'], function () {
-    Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('list', [ProductController::class, 'index']);
         Route::post('update', [ProductController::class, 'update']);
         Route::post('add', [ProductController::class, 'store']);
@@ -36,10 +36,16 @@ Route::group(['prefix' => 'product'], function () {
 });
 
 Route::group(['prefix' => 'order'], function () {
-    Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('list', [OrderController::class, 'index']);
         Route::post('add', [OrderController::class, 'store']);
         Route::delete('delete', [OrderController::class, 'destroy']);
         Route::get('detail', [OrderController::class, 'orderDetail']);
+        Route::put('mark-status', [OrderController::class, 'markStatus']);
     });
+});
+
+Route::group(['prefix' => 'customer'], function () {
+    Route::get('menu-list', [ProductController::class, 'index']);
+    Route::post('submit-order', [OrderController::class, 'store']);
 });

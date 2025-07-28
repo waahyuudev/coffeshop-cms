@@ -1,6 +1,12 @@
 <script setup>
 import EcommerceRevenueReport from '@/views/dashboards/ecommerce/EcommerceRevenueReport.vue'
 import EcommerceStatistics from '@/views/dashboards/ecommerce/EcommerceStatistics.vue'
+
+definePage({
+  meta: {
+    authenticatedOnly: true,
+  },
+})
 </script>
 
 <template>

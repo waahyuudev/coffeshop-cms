@@ -257,7 +257,6 @@ const closeDialog = () => {
                   <span class="mb-1">Description (optional)</span>
                   <VTextarea
                     v-model="formData.description"
-                    :rules="[rules.description]"
                     placeholder="Espresso dengan steamed milk"
                     class="border rounded"
                   />

@@ -4,6 +4,12 @@ import { paginationMeta } from '@api-utils/paginationMeta'
 import ViewDetailOrder from "@/views/orders/ViewDetailOrder.vue"
 import ViewDetailProduct from "@/views/products/ViewDetailProduct.vue"
 
+definePage({
+  meta: {
+    authenticatedOnly: true,
+  },
+})
+
 const widgetData = ref([
   {
     title: 'Pending Payment',
@@ -153,6 +159,15 @@ const showDialogDetailOrder = order => {
   selectedOrder.value = order
 
   isShowDialogDetailOrder.value = true
+}
+
+const doUpdateStatus = async status => {
+  const id = selectedOrder.value.id
+
+  await $api('/order/mark-status', { method: 'PUT', body: { status: status }, query: { id: id } })
+
+  // refetch products
+  fetchOrders()
 }
 
 // const orders = computed(() => [])
@@ -385,6 +400,7 @@ const showDialogDetailOrder = order => {
   <ViewDetailOrder
     v-model:isDialogOpen="isShowDialogDetailOrder"
     :detail-order-data="selectedOrder"
+    @update-status="doUpdateStatus"
   />
 </template>
 

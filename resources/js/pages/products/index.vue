@@ -110,9 +110,14 @@ const resolveCategory = category => {
       color: 'success',
       icon: 'tabler-coffee',
     }
-  if (category === 'food')
+  if (category === 'non-coffee')
     return {
       color: 'info',
+      icon: 'tabler-mug',
+    }
+  if (category === 'food')
+    return {
+      color: 'warning',
       icon: 'tabler-bowl',
     }
 }
@@ -211,75 +216,77 @@ const handleSaveOrUpdate = async formData => {
 <template>
   <div>
     <!-- 👉 widgets -->
-    <VCard class="mb-6">
+    <!--
+      <VCard class="mb-6">
       <VCardText>
-        <VRow>
-          <template
-            v-for="(data, id) in widgetData"
-            :key="id"
-          >
-            <VCol
-              cols="12"
-              sm="6"
-              md="3"
-              class="px-6"
-            >
-              <div
-                class="d-flex justify-space-between"
-                :class="$vuetify.display.xs
-                  ? 'product-widget'
-                  : $vuetify.display.sm
-                    ? id < 2 ? 'product-widget' : ''
-                    : ''"
-              >
-                <div class="d-flex flex-column gap-y-1">
-                  <div class="text-body-1 font-weight-medium text-capitalize">
-                    {{ data.title }}
-                  </div>
+      <VRow>
+      <template
+      v-for="(data, id) in widgetData"
+      :key="id"
+      >
+      <VCol
+      cols="12"
+      sm="6"
+      md="3"
+      class="px-6"
+      >
+      <div
+      class="d-flex justify-space-between"
+      :class="$vuetify.display.xs
+      ? 'product-widget'
+      : $vuetify.display.sm
+      ? id < 2 ? 'product-widget' : ''
+      : ''"
+      >
+      <div class="d-flex flex-column gap-y-1">
+      <div class="text-body-1 font-weight-medium text-capitalize">
+      {{ data.title }}
+      </div>
 
-                  <h4 class="text-h4 my-1">
-                    {{ data.value }}
-                  </h4>
+      <h4 class="text-h4 my-1">
+      {{ data.value }}
+      </h4>
 
-                  <div class="d-flex">
-                    <div class="me-2 text-disabled text-no-wrap">
-                      {{ data.desc }}
-                    </div>
+      <div class="d-flex">
+      <div class="me-2 text-disabled text-no-wrap">
+      {{ data.desc }}
+      </div>
 
-                    <VChip
-                      v-if="data.change"
-                      label
-                      :color="data.change > 0 ? 'success' : 'error'"
-                    >
-                      {{ prefixWithPlus(data.change) }}%
-                    </VChip>
-                  </div>
-                </div>
+      <VChip
+      v-if="data.change"
+      label
+      :color="data.change > 0 ? 'success' : 'error'"
+      >
+      {{ prefixWithPlus(data.change) }}%
+      </VChip>
+      </div>
+      </div>
 
-                <VAvatar
-                  variant="tonal"
-                  rounded
-                  size="38"
-                >
-                  <VIcon
-                    :icon="data.icon"
-                    size="28"
-                  />
-                </VAvatar>
-              </div>
-            </VCol>
-            <VDivider
-              v-if="$vuetify.display.mdAndUp ? id !== widgetData.length - 1
-                : $vuetify.display.smAndUp ? id % 2 === 0
-                  : false"
-              vertical
-              inset
-              length="95"
-            />
-          </template>
-        </VRow>
+      <VAvatar
+      variant="tonal"
+      rounded
+      size="38"
+      >
+      <VIcon
+      :icon="data.icon"
+      size="28"
+      />
+      </VAvatar>
+      </div>
+      </VCol>
+      <VDivider
+      v-if="$vuetify.display.mdAndUp ? id !== widgetData.length - 1
+      : $vuetify.display.smAndUp ? id % 2 === 0
+      : false"
+      vertical
+      inset
+      length="95"
+      />
+      </template>
+      </VRow>
       </VCardText>
-    </VCard>
+      </VCard>
+    -->
 
     <!-- 👉 products -->
     <VCard
@@ -410,7 +417,6 @@ const handleSaveOrUpdate = async formData => {
 
         <!-- Actions -->
         <template #item.actions="{ item }">
-
           <IconBtn>
             <VIcon icon="tabler-dots-vertical" />
             <VMenu activator="parent">
