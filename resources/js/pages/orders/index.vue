@@ -181,62 +181,64 @@ const doUpdateStatus = async status => {
 
 <template>
   <div>
-    <VCard class="mb-6">
-      <!-- 👉 Widgets  -->
+    <!--
+      <VCard class="mb-6">
+      &lt;!&ndash; 👉 Widgets  &ndash;&gt;
       <VCardText>
-        <VRow>
-          <template
-            v-for="(data, id) in widgetData"
-            :key="id"
-          >
-            <VCol
-              cols="12"
-              sm="6"
-              md="3"
-              class="px-6"
-            >
-              <div
-                class="d-flex justify-space-between"
-                :class="$vuetify.display.xs
-                  ? 'product-widget'
-                  : $vuetify.display.sm
-                    ? id < 2 ? 'product-widget' : ''
-                    : ''"
-              >
-                <div class="d-flex flex-column gap-y-1">
-                  <h4 class="text-h4">
-                    {{ data.value }}
-                  </h4>
+      <VRow>
+      <template
+      v-for="(data, id) in widgetData"
+      :key="id"
+      >
+      <VCol
+      cols="12"
+      sm="6"
+      md="3"
+      class="px-6"
+      >
+      <div
+      class="d-flex justify-space-between"
+      :class="$vuetify.display.xs
+      ? 'product-widget'
+      : $vuetify.display.sm
+      ? id < 2 ? 'product-widget' : ''
+      : ''"
+      >
+      <div class="d-flex flex-column gap-y-1">
+      <h4 class="text-h4">
+      {{ data.value }}
+      </h4>
 
-                  <h6 class="text-h6">
-                    {{ data.title }}
-                  </h6>
-                </div>
+      <h6 class="text-h6">
+      {{ data.title }}
+      </h6>
+      </div>
 
-                <VAvatar
-                  variant="tonal"
-                  rounded
-                  size="38"
-                >
-                  <VIcon
-                    :icon="data.icon"
-                    size="28"
-                  />
-                </VAvatar>
-              </div>
-            </VCol>
-            <VDivider
-              v-if="$vuetify.display.mdAndUp ? id !== widgetData.length - 1
-                : $vuetify.display.smAndUp ? id % 2 === 0
-                  : false"
-              vertical
-              inset
-              length="55"
-            />
-          </template>
-        </VRow>
+      <VAvatar
+      variant="tonal"
+      rounded
+      size="38"
+      >
+      <VIcon
+      :icon="data.icon"
+      size="28"
+      />
+      </VAvatar>
+      </div>
+      </VCol>
+      <VDivider
+      v-if="$vuetify.display.mdAndUp ? id !== widgetData.length - 1
+      : $vuetify.display.smAndUp ? id % 2 === 0
+      : false"
+      vertical
+      inset
+      length="55"
+      />
+      </template>
+      </VRow>
       </VCardText>
-    </VCard>
+      </VCard>
+    -->
 
     <VCard>
       <!-- 👉 Filters -->

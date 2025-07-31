@@ -1,75 +1,44 @@
 <script setup>
+import { ref, computed, onMounted } from 'vue'
 import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
 
 const vuetifyTheme = useTheme()
 
-const series = {
-  bar: [
-    {
-      name: 'Earning',
-      data: [
-        270,
-        210,
-        180,
-        200,
-        250,
-        280,
-        250,
-        270,
-        150,
-      ],
-    },
-    {
-      name: 'Expense',
-      data: [
-        -140,
-        -160,
-        -180,
-        -150,
-        -100,
-        -60,
-        -80,
-        -100,
-        -180,
-      ],
-    },
-  ],
-  line: [
-    {
-      name: 'Last Month',
-      data: [
-        20,
-        10,
-        30,
-        16,
-        24,
-        5,
-        40,
-        23,
-        28,
-        5,
-        30,
-      ],
-    },
-    {
-      name: 'This Month',
-      data: [
-        50,
-        40,
-        60,
-        46,
-        54,
-        35,
-        70,
-        53,
-        58,
-        35,
-        60,
-      ],
-    },
-  ],
-}
+const barSeries = ref([])
+const lineSeries = ref([])
+const barCategories = ref([])
+const lineCategories = ref([])
+const revenue = ref(0)
+const budget = ref(0)
+
+onMounted(async () => {
+  const { data: revenueData } = await useApi(createUrl('/dashboard/revenue-chart'))
+
+  if (revenueData?.bar && revenueData?.line) {
+    barSeries.value = [
+      { name: 'Earning', data: revenueData.bar.earning },
+      { name: 'Expense', data: revenueData.bar.expense },
+    ]
+    barCategories.value = revenueData.bar.months
+
+    lineSeries.value = [
+      { name: 'Last Month', data: revenueData.line.last },
+      { name: 'This Month', data: revenueData.line.this },
+    ]
+    lineCategories.value = revenueData.line.days.map(String)
+  }
+
+  if (revenueData?.summary) {
+    revenue.value = revenueData.summary.revenue
+    budget.value = revenueData.summary.budget
+  }
+})
+
+const series = computed(() => ({
+  bar: barSeries.value,
+  line: lineSeries.value,
+}))
 
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
@@ -77,7 +46,7 @@ const chartOptions = computed(() => {
   const labelColor = `rgba(${ hexToRgb(currentTheme['on-surface']) },${ variableTheme['disabled-opacity'] })`
   const legendColor = `rgba(${ hexToRgb(currentTheme['on-background']) },${ variableTheme['high-emphasis-opacity'] })`
   const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
-  
+
   return {
     bar: {
       chart: {
@@ -130,17 +99,7 @@ const chartOptions = computed(() => {
         },
       },
       xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-        ],
+        categories: barCategories.value,
         labels: {
           style: {
             fontSize: '13px',
@@ -218,20 +177,11 @@ const chartOptions = computed(() => {
       },
       stroke: {
         curve: 'smooth',
-        dashArray: [
-          5,
-          0,
-        ],
-        width: [
-          1,
-          2,
-        ],
+        dashArray: [5, 0],
+        width: [1, 2],
       },
       legend: { show: false },
-      colors: [
-        borderColor,
-        currentTheme.primary,
-      ],
+      colors: [borderColor, currentTheme.primary],
       grid: {
         show: false,
         borderColor,
@@ -243,6 +193,7 @@ const chartOptions = computed(() => {
       },
       markers: { size: 0 },
       xaxis: {
+        categories: lineCategories.value,
         labels: { show: false },
         axisTicks: { show: false },
         axisBorder: { show: false },
@@ -286,7 +237,7 @@ const chartOptions = computed(() => {
             size="small"
             class="d-flex mx-auto"
           >
-            <span>2022</span>
+            <span>2024</span>
             <template #append>
               <VIcon
                 size="16"
@@ -296,7 +247,7 @@ const chartOptions = computed(() => {
             <VMenu activator="parent">
               <VList>
                 <VListItem
-                  v-for="(item, index) in ['2021', '2020', '2019']"
+                  v-for="(item, index) in ['2023', '2022', '2021']"
                   :key="index"
                   :value="index"
                 >
@@ -306,13 +257,14 @@ const chartOptions = computed(() => {
             </VMenu>
           </VBtn>
 
+          <!-- ✅ Dynamic Revenue & Budget Section -->
           <div class="d-flex flex-column mt-8">
             <h3 class="font-weight-medium text-h3">
-              $25,825
+              {{ revenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}
             </h3>
             <p>
               <span class="text-high-emphasis font-weight-medium me-1">Budget:</span>
-              <span>56,800</span>
+              <span>{{ budget.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
             </p>
           </div>
 

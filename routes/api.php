@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -23,6 +24,13 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('logout', [AuthController::class, 'logout']);
+    });
+});
+
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('statistics', [DashboardController::class, 'getStatistic']);
+        Route::get('revenue-chart', [DashboardController::class, 'getChartData']);
     });
 });
 
