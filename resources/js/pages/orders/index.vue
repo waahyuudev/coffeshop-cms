@@ -3,6 +3,8 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import ViewDetailOrder from "@/views/orders/ViewDetailOrder.vue"
 import ViewDetailProduct from "@/views/products/ViewDetailProduct.vue"
+import { currentDate } from "@/utils/current-date"
+import JsonExcel from "vue-json-excel3"
 
 definePage({
   meta: {
@@ -177,6 +179,37 @@ const doUpdateStatus = async status => {
 //   await $api(`/apps/ecommerce/orders/${ id }`, { method: 'DELETE' })
 //   fetchOrders()
 // }
+
+const jsonForExported = computed(() => {
+  return orders.value.map(item => {
+    return {
+      "order": `${item.table_number}#${item.order_id}`,
+      "date": formatOrderDate(item.created_at),
+      "customers": item.customer_name,
+      "payment": resolvePaymentStatus(item.payment_status)?.text,
+      "status": resolveStatus(item.status)?.text,
+      "method": item.channel_payment.charAt(0).toUpperCase() + item.channel_payment.slice(1),
+      "price": formatPrice(item.total_price),
+    }
+  })
+})
+
+const jsonField = {
+  "Order": "order",
+  "Date": "date",
+  "Customers": "customers",
+  "Payment": "payment",
+  "Status": "status",
+  "Method": "method",
+  "Price": "price",
+}
+
+
+const getFilenameExport = () => {
+  const randomString = Math.random().toString(36).slice(2)
+
+  return `REPORT-${currentDate()}-${randomString.toUpperCase()}.xlsx`
+}
 </script>
 
 <template>
@@ -257,13 +290,30 @@ const doUpdateStatus = async status => {
               style="min-inline-size: 6.25rem;"
               :items="[5, 10, 20, 50, 100]"
             />
-            <VBtn
+            <!--
+              <VBtn
               variant="tonal"
               color="secondary"
               prepend-icon="tabler-screen-share"
               text="Export"
               append-icon="tabler-chevron-down"
-            />
+              />
+            -->
+            <JsonExcel
+              class="btn btn-default"
+              :data="jsonForExported"
+              :fields="jsonField"
+              worksheet="Report"
+              :name="getFilenameExport()"
+              type="xlsx"
+            >
+              <VBtn
+                variant="tonal"
+                prepend-icon="tabler-screen-share"
+              >
+                Export
+              </VBtn>
+            </JsonExcel>
           </div>
         </div>
       </VCardText>

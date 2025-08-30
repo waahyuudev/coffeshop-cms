@@ -353,6 +353,7 @@
     "resolveImageUrl": true,
     "resolveImgUrl": true,
     "formatPrice": true,
-    "formatOrderDate": true
+    "formatOrderDate": true,
+    "currentDate": true
   }
 }
