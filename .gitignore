@@ -1,10 +1,8 @@
+# CACHE & SENSITIVE FILES (Keep these ignored)
 /.phpunit.cache
-/node_modules
-/public/build
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
 .env
 .env.backup
 .env.production
@@ -17,7 +15,7 @@ yarn-error.log
 /.fleet
 /.idea
 
-# Logs
+# LOGS (Keep these ignored)
 logs
 *.log
 npm-debug.log*
@@ -26,16 +24,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-.DS_Store
-dist
-dist-ssr
-*.local
+# NODE MODULES (Definitely keep this ignored)
+/node_modules
 
-/cypress/videos/
-/cypress/screenshots/
-
-# 👉 Custom Git ignores
+# VENDOR & BUILD ASSETS (These were the problem)
+# You need to commit these folders for a direct Git deployment.
+# /public/build
+# /vendor
 
 # Editor directories and files
 .vscode/*
@@ -57,6 +52,6 @@ resources/js/plugins/iconify/icons.css
 # Ignore MSW script
 public/mockServiceWorker.js
 
-# Env files
+# Env files - This is the correct way to ignore all .env files except the example
 .env*
 !.env.example
