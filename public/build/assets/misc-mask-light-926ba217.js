@@ -1,0 +1,1 @@
+import{aa as u,av as o,a4 as l}from"./main-cca7e2fd.js";const d=(t,r,n,i,a=!1)=>{const e=u(),{global:s}=o();return l(()=>{if(s.name.value==="light")return e.skin==="bordered"&&a?n:t;if(s.name.value==="dark")return e.skin==="bordered"&&a?i:r})},c="/build/assets/misc-mask-dark-d10426f0.png",f="/build/assets/misc-mask-light-d25607d4.png";export{c as a,f as b,d as u};
